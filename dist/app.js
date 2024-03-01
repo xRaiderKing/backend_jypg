@@ -4,16 +4,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const morgan_1 = __importDefault(require("morgan"));
 const cors_1 = __importDefault(require("cors"));
+const morgan_1 = __importDefault(require("morgan"));
 const body_parser_1 = __importDefault(require("body-parser"));
-/**
- * Clase de inicio de la aplicacion NodeJsExpress
- * Autor: Jesus Yael Padron Grimaldo
- * Fecha 28 de Febrero del 2024
- */
+const authRoutes_1 = __importDefault(require("./routes/authRoutes"));
+const usuarioRoutes_1 = __importDefault(require("./routes/usuarioRoutes"));
+/*
+* Clase de inicio de nuestra aplicación NodeJsExpress
+* Autor: Gabriel Barrón Rodríguez
+* Fecha: 23 Junio 2024
+*/
 class Server {
-    // Inicializa la clase
+    //Inicializa clase
     constructor() {
         this.app = (0, express_1.default)();
         this.config();
@@ -22,7 +24,7 @@ class Server {
             console.log("Server on port", this.app.get("port"));
         });
     }
-    // Configuracion de modulos
+    //Configuración de módulos
     config() {
         // configuración del puerto para el servidor
         this.app.set("port", 3000);
@@ -34,8 +36,10 @@ class Server {
         this.app.use(body_parser_1.default.json());
         this.app.use(body_parser_1.default.urlencoded({ extended: false, }));
     }
-    // Configuracion de rutas
+    //Configura las rutas
     routes() {
+        this.app.use("/", authRoutes_1.default);
+        this.app.use('/usuario', usuarioRoutes_1.default);
     }
 }
 const server = new Server();

@@ -1,45 +1,56 @@
-import express, {Application} from 'express';
-import morgan from 'morgan';
+import express, { Application } from 'express';
 import cors from 'cors';
+import morgan from 'morgan';
 import bodyParser from 'body-parser';
-
-/**
- * Clase de inicio de la aplicacion NodeJsExpress
- * Autor: Jesus Yael Padron Grimaldo
- * Fecha 28 de Febrero del 2024
- */
+import authRoutes from './routes/authRoutes';
+import usuarioRoutes from './routes/usuarioRoutes';
+/*
+* Clase de inicio de nuestra aplicación NodeJsExpress
+* Autor: Gabriel Barrón Rodríguez
+* Fecha: 23 Junio 2024
+*/
 class Server {
     private app: Application;
 
-    // Inicializa la clase
+
+    //Inicializa clase
     constructor() {
         this.app = express();
         this.config();
         this.routes();
         this.app.listen(this.app.get("port"), () => {
-          console.log("Server on port", this.app.get("port"));
-      });      
+            console.log("Server on port", this.app.get("port"));
+        });
     }
-    // Configuracion de modulos
+
+
+    //Configuración de módulos
     config(): void {
         // configuración del puerto para el servidor
         this.app.set("port", 3000);
-       
+
+
         // muestra las peticiones en consola
         this.app.use(morgan("dev"));
-   
+
+
         // puertos de conexión de la API
         this.app.use(cors());
-   
+
+
         // solo se permiten peticiones en formato JSON
         this.app.use(bodyParser.json());
-        this.app.use(bodyParser.urlencoded({extended: false,}),)
+        this.app.use(bodyParser.urlencoded({ extended: false, }),
+        );
     }
-  
-    // Configuracion de rutas
-    routes(){
-        
+
+
+    //Configura las rutas
+    routes() {
+        this.app.use("/", authRoutes);
+        this.app.use('/usuario', usuarioRoutes)
     }
 }
+
 
 const server = new Server();
